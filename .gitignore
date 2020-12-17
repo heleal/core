@@ -1,0 +1,5 @@
+/venv/
+/out/tokens/remove_punctuation/
+/out/tokens/initial/
+/out/tokens/remove_stop_words/
+/dados/pt-BR/

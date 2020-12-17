@@ -7,8 +7,8 @@ class Processamento:
     def processa_text_blob(self, linha):
         texts = []
         text = TextBlob(linha)
-        sentensas = text.sentences
-        for s in sentensas:
+        sentencas = text.sentences
+        for s in sentencas:
             sentimento = s.sentiment
             polaridade = sentimento[0]
             subjetividade = sentimento[1]
