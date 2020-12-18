@@ -10,6 +10,7 @@ class ImportData:
             reader = csv.DictReader(csv_file, delimiter=",")
             for i, row in enumerate(reader):
                 text = row["Text"]
+
                 list_comments.append(text)
         csv_file.close()
         return list_comments

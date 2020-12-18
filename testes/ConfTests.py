@@ -5,3 +5,5 @@ class ConfTest:
     FOLDER_OUT = "../../out"
 
     TIMESTAMP = "%Y%m%d-%H_%M_%S"
+
+    LANGUAGE = "english"

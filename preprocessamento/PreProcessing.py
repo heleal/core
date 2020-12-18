@@ -1,13 +1,15 @@
 from nltk.tokenize import TweetTokenizer
 from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
+from nltk.probability import FreqDist
+import random
 import string
 
 
 class PreProcessing:
 
-    def __init__(self) -> None:
+    def __init__(self, language) -> None:
         super().__init__()
+        self.language = language
 
     def generate_tokens(self, text):
         mytkzr = TweetTokenizer()
@@ -19,10 +21,11 @@ class PreProcessing:
         return full_stop[0]
 
     def remove_stop_words_full(self, list_tokens):
-        stop_words = set(stopwords.words())
+        stop_words = set(stopwords.words(self.language))
         filtered_sentence = []
         stop_remove = []
-        for w in list_tokens:
+        for token in list_tokens:
+            w = token.lower()
             if w not in stop_words:
                 filtered_sentence.append(w)
             else:
@@ -44,3 +47,14 @@ class PreProcessing:
                 stop_remove.append(w)
         return [filtered_sentence, stop_remove]
 
+    def find_freq_dist(self, abc):
+        word_freq = FreqDist()
+        for tokens in abc:
+            word_freq += FreqDist(token for token in tokens)
+        return word_freq
+
+    def create_random_corpus(self, list_comments: list, limit):
+        random_list = list_comments.copy()
+        random.shuffle(random_list)
+        sub_list_random = random_list[:limit]
+        return sub_list_random
