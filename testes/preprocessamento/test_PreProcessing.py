@@ -9,7 +9,7 @@ from preprocessamento.PreProcessing import PreProcessing
 from testes.ConfTests import ConfTest
 
 
-class TestPreprocessamento(TestCase):
+class TestPreProcessing(TestCase):
 
     @classmethod
     def setUpClass(self) -> None:
@@ -29,15 +29,6 @@ class TestPreprocessamento(TestCase):
         self.folder_out = os.path.realpath(ConfTest.FOLDER_OUT)
         self.manipulate_data = ManipulateData()
 
-    def test_create_random_corpus(self):
-        folder = os.path.join(self.folder_out, "corpus")
-        label_file_base = "tokens_random"
-        str_time = datetime.now().strftime(ConfTest.TIMESTAMP)
-        label_file = label_file_base + str_time + ".txt"
-
-        corpus_random = self.pre_processing.create_random_corpus(self.lista, self.limit)
-        self.manipulate_data.write_corpus(corpus_random, folder, label_file)
-        self.manipulate_data.copy_last(os.path.join(folder, label_file), folder)
 
     def test_generate_tokens(self):
         folder = os.path.join(self.folder_out, "corpus")
@@ -71,8 +62,8 @@ class TestPreprocessamento(TestCase):
 
         for comment in list_tokens:
             clean_comment = self.pre_processing.remove_punctuation_full(comment)
-            self.manipulate_data.write_tokens(clean_comment[0], folder, label_file_remove_punctuation)
-            self.manipulate_data.write_tokens(clean_comment[1], folder, label_file_punctuation)
+            self.manipulate_data.write_tokens([clean_comment[0],comment[1]], folder, label_file_remove_punctuation)
+            self.manipulate_data.write_tokens([clean_comment[1],comment[1]], folder, label_file_punctuation)
         self.manipulate_data.copy_last(os.path.join(folder, label_file_remove_punctuation), folder)
 
     def test_remove_stop_word_full(self):
@@ -91,30 +82,8 @@ class TestPreprocessamento(TestCase):
 
         for comment in list_tokens:
             clean_comment = self.pre_processing.remove_stop_words_full(comment)
-            self.manipulate_data.write_tokens(clean_comment[0],  folder, label_file_remove_stop_words)
-            self.manipulate_data.write_tokens(clean_comment[1],  folder, label_file_stop_words)
+            self.manipulate_data.write_tokens([clean_comment[0], comment[1]],  folder, label_file_remove_stop_words)
+            self.manipulate_data.write_tokens([clean_comment[1], comment[1]],  folder, label_file_stop_words)
         self.manipulate_data.copy_last(os.path.join(folder, label_file_remove_stop_words), folder)
 
-    def test_find_freq_dist_with_remove_stop_word(self):
-        folder = os.path.join(self.folder_out, "tokens", "remove_stop_words")
-        label = "last.txt"
-        file_path = os.path.join(folder, label)
-        list_tokens = self.manipulate_data.read_tokens(file_path)
-
-
-        freq_dist = self.pre_processing.find_freq_dist(list_tokens)
-        print(freq_dist)
-
-        folder = os.path.join(self.folder_out, "freq_dist")
-        label = "last.txt"
-        freq_path = os.path.join(folder, label)
-        self.manipulate_data.write_freq_dist(freq_path,freq_dist, 200)
-
-    def test_find_freq_dist_without_remove_stop_word(self):
-        folder = os.path.join(self.folder_out, "tokens", "remove_punctuation")
-        label = "last.txt"
-        file_path = os.path.join(folder, label)
-        list_tokens = self.manipulate_data.read_tokens(file_path)
-
-        self.pre_processing.find_freq_dist(list_tokens)
 

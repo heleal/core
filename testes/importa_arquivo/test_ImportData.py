@@ -46,3 +46,22 @@ class TestLearquivo(TestCase):
         lista = s.read_json(path_file)
         for docs in lista[:100]:
             print(docs)
+
+
+
+    def test_read_folder_csv(self):
+        path_folder = os.path.realpath(ConfTest.FOLDER_DATA_NEG)
+        s = ImportData()
+        neg = s.read_folder_csv(path_folder, 100, "NEG", False)
+
+        path_folder = os.path.realpath(ConfTest.FOLDER_DATA_POS)
+        pos = s.read_folder_csv(path_folder, 100, "POS", False)
+        print("sdas")
+
+    def test_read_folder_csv_random(self):
+        path_folder = os.path.realpath(ConfTest.FOLDER_DATA_NEG)
+        s = ImportData()
+        neg01 = s.read_folder_csv(path_folder, 10, "NEG", True)
+        neg02 = s.read_folder_csv(path_folder, 10, "NEG", True)
+        neg03 = s.read_folder_csv(path_folder, 10, "NEG", True)
+        print("dfsd")

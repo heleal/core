@@ -3,6 +3,8 @@ import re
 import shutil
 import json
 import csv
+import random
+from itertools import count
 
 
 class ManipulateData:
@@ -14,7 +16,8 @@ class ManipulateData:
                 csvfile, delimiter=';',
                 quotechar='|', quoting=csv.QUOTE_MINIMAL
             )
-            csv_writer.writerow(comments_tokens)
+            a = [comments_tokens[1]] + comments_tokens[0]
+            csv_writer.writerows([a])
 
     def copy_file(self, orig, dst):
         shutil.copyfile(orig, dst, follow_symlinks=True)
@@ -32,7 +35,9 @@ class ManipulateData:
             )
             list_tokens = []
             for row in csv_reader:
-                list_tokens.append(row)
+                sent = row[0]
+                text = row[1:]
+                list_tokens.append([text, sent])
             return list_tokens
 
     def write_corpus(self, corpus, folder, label):
@@ -43,7 +48,8 @@ class ManipulateData:
                 quotechar='|', quoting=csv.QUOTE_MINIMAL
             )
             for comment in corpus:
-                csv_writer.writerow([comment])
+                row = [comment["text"], comment["sentiment"]]
+                csv_writer.writerow(row)
 
     def read_corpus(self, path_file):
         label_file = path_file
@@ -54,7 +60,7 @@ class ManipulateData:
             )
             corpus = []
             for row in csv_reader:
-                corpus.append(row[0])
+                corpus.append(row)
             return corpus
 
     def write_freq_dist(self, path_file, freq, num):
@@ -65,3 +71,9 @@ class ManipulateData:
             )
             for key, count in freq.most_common(num):
                 csv_writer.writerow([key, count])
+
+    def create_random_corpus(self, list_comments: list, limit):
+        random_list = list_comments.copy()
+        random.shuffle(random_list)
+        sub_list_random = random_list[:limit]
+        return sub_list_random

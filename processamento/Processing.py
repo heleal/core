@@ -25,25 +25,22 @@ class Processing:
         return texts
 
     def separate_train_and_test_tokens(self, list_comment,sp):
-        a = list_comment[:sp]
-        b = list_comment[sp:]
-        return [a, b]
+        num_train = int(len(list_comment) * sp/100)
+        list_train = list_comment[:num_train]
+        list_set = list_comment[num_train:]
+        return [list_train, list_set]
 
-    def find_freq_dist(self, abc):
-        word_freq = FreqDist()
-        for tokens in abc:
-            word_freq += FreqDist(token for token in tokens)
-        return word_freq
 
     def create_features(self, documents):
         doc_rep = []
-        for words in documents:
+        for words, tag in documents:
             features = FreqDist(w.lower() for w in words)
-            doc_rep.append([features, "POS"])
+            doc_rep.append([features, tag])
         return doc_rep
 
     def train_naive(self, doc_rep_train, doc_rep_test):
         classifier = nbc.train(doc_rep_train)
         acur = nltk.classify.accuracy(classifier, doc_rep_test)
         print(acur)
+        print(classifier.show_most_informative_features(10))
         return classifier

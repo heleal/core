@@ -34,11 +34,7 @@ class TestProcessing(TestCase):
         train, test = self.processing.separate_train_and_test_tokens(full_list, 20)
         print("sd")
 
-    def test_create_freq_train(self):
-        full_list = self.list_tokens
-        train, test = self.processing.separate_train_and_test_tokens(full_list, 20)
-        freq_dist = self.processing.find_freq_dist(train)
-        print(freq_dist.most_common(15))
+
 
     def test_get_word_freq(self):
         sub_lista = self.lista
@@ -52,12 +48,12 @@ class TestProcessing(TestCase):
         doc_rep_test = self.processing.create_features(test)
         doc_rep = doc_rep_train + doc_rep_test
 
-    def test_create_features(self):
+    def test_train_naive(self):
         full_list = self.list_tokens
-        train, test = self.processing.separate_train_and_test_tokens(full_list, 20)
+        train, test = self.processing.separate_train_and_test_tokens(full_list, 80)
         doc_rep_train = self.processing.create_features(train)
         doc_rep_test = self.processing.create_features(test)
-        self.processing.train_naive(doc_rep_train, doc_rep_test)
+        classifier = self.processing.train_naive(doc_rep_train, doc_rep_test)
 
 
 
